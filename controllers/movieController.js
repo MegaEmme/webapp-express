@@ -1,7 +1,18 @@
 const connection = require('../data/db');
+const { url } = require('inspector');
+//operazioni CRUD
 //index
 function index (req,res) {
-    const sql = 'SELECT * FROM movies'
+
+    const sql = `
+                SELECT
+                    movies.*, AVG(reviews.vote) AS media_recensioni
+                FROM
+                    movies
+                LEFT JOIN
+                    reviews ON movies.id = reviews.movie_id
+                GROUP BY movies.id
+                `
 
     connection.query(sql, (err, results) => {
 
@@ -11,7 +22,10 @@ function index (req,res) {
             })
         }
 
-        res.json(results);
+        res.json(results.map(result => ({
+            ...result,
+            imagePath: process.env.PUBLIC_PATH + '/images/movies_cover/' + result.image
+        })));
     })
 };
 //show
