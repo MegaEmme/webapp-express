@@ -13,8 +13,6 @@ function index (req,res) {
 
         res.json(results);
     })
-
-    res.send('Index Movies')
 };
 //show
 function show (req,res) {
@@ -42,8 +40,6 @@ function show (req,res) {
                 id
             })
         }
-
-        res.json(results[0]);
 
         const movie = results[0];
 
