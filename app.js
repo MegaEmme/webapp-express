@@ -13,6 +13,10 @@ const notFound = require('./middlewares/notFound');
 app.use(express.static('public'));
 //registro il body parser
 app.use(express.json());
+//welcome page
+app.get('/', (req,res) => {
+    res.send('Benvenuto nella web application')
+});
 //registro la path del router
 app.use('/movies', moviesRouter);
 //registro middleware errorsHandler
