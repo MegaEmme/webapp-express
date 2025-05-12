@@ -4,7 +4,7 @@ const app = express();
 //definisco la porta
 const port = process.env.PORT || 3000;
 //importo middleware cors
-const cors = require('cors');
+const cors = require('cors')
 //importo il router
 const moviesRouter = require('./routers/moviesRouter');
 //importo middleware errorsHandler
