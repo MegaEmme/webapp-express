@@ -38,7 +38,7 @@ function show (req,res) {
                     movies
                 WHERE
                     id = ?
-    `
+                `
 
     connection.query(sql, [id], (err, results) => {
 
@@ -55,7 +55,11 @@ function show (req,res) {
             })
         }
 
-        const movie = results[0];
+        const currentMovie = results[0];
+
+        const movie = {...currentMovie,
+            imagePath: process.env.PUBLIC_PATH + '/images/movies_cover/' + currentMovie.image
+            }
 
         const sql = `SELECT 
                         *
@@ -63,7 +67,7 @@ function show (req,res) {
                         reviews
                     WHERE
                         movie_id = ?
-        `
+                    `
 
         connection.query(sql, [id], (err, results) => {
             if (err) {
