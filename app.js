@@ -9,16 +9,16 @@ const moviesRouter = require('./routers/moviesRouter');
 const errorsHandler = require('./middlewares/errorsHandler');
 //importo middleware notFound
 const notFound = require('./middlewares/notFound');
-//registro asset statici
+//registro middleware asset statici
 app.use(express.static('public'));
-//registro il body parser
+//registro middleware body parser
 app.use(express.json());
 //welcome page
 app.get('/', (req,res) => {
     res.send('Benvenuto nella web application')
 });
 //registro la path del router
-app.use('/movies', moviesRouter);
+app.use('/api/movies', moviesRouter);
 //registro middleware errorsHandler
 app.use(errorsHandler);
 //registro middleware notFound
