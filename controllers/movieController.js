@@ -6,7 +6,7 @@ function index (req,res) {
 
     const sql = `
                 SELECT
-                    movies.*, AVG(reviews.vote) AS media_recensioni
+                    movies.*, ROUND(AVG(reviews.vote), 2) AS review_vote
                 FROM
                     movies
                 LEFT JOIN
