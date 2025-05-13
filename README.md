@@ -2,8 +2,24 @@
 
 È ora di mettere alla prova le vostre conoscenze iniziando a costruire la vostra prima app completa!
 
+### Comandi da eseguire nel terminale per inizializzare il progetto dopo averlo scaricato (lato server):
 
-## Consegna
+
+    npm init -y    --> installa npm
+    npm i express  --> installa express
+    npm i mysql2   --> si collega al db su mySql
+    npm i cors     --> autorizza accesso a porte specifiche tramite browser
+
+Per startare il server:
+
+    npm run dev
+
+Se tutto funziona, dovrebbero apparire i seguenti messaggi nel terminale:
+- sono un server attivo sulla porta 3000
+- MySQL server connected
+
+---
+## Consegna Day 1
 
 - Utilizzando il file in allegato, creiamo un database con MySQL Workbench
 - Creiamo una nuova applicazione Express
