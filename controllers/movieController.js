@@ -3,16 +3,36 @@ const { url } = require('inspector');
 //operazioni CRUD
 //index
 function index (req,res) {
-
-    const sql = `
-                SELECT
-                    movies.*, ROUND(AVG(reviews.vote), 2) AS review_vote
-                FROM
-                    movies
-                LEFT JOIN
-                    reviews ON movies.id = reviews.movie_id
-                GROUP BY movies.id
-                `
+    const {search} = req.query;
+    let sql = `
+    SELECT
+        movies.*, ROUND(AVG(reviews.vote), 2) AS review_vote
+    FROM
+        movies
+    LEFT JOIN
+        reviews ON movies.id = reviews.movie_id
+    `
+    if(search) {
+        sql += `
+        WHERE 
+            title
+        LIKE
+            "%${search}%"
+        OR
+            director 
+        LIKE
+            "%${search}%"
+        OR
+            genre
+        LIKE
+            "%${search}%"
+        OR
+            abstract
+        LIKE
+            "%${search}%"
+        `
+    }
+    sql += `GROUP BY movies.id`
 
     connection.query(sql, (err, results) => {
 
