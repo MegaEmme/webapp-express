@@ -4,6 +4,7 @@ const { url } = require('inspector');
 //index
 function index (req,res) {
     const {search} = req.query;
+    const preparedParams = [];
     let sql = `
     SELECT
         movies.*, ROUND(AVG(reviews.vote), 2) AS review_vote
@@ -17,24 +18,25 @@ function index (req,res) {
         WHERE 
             title
         LIKE
-            "%${search}%"
+            ?
         OR
             director 
         LIKE
-            "%${search}%"
+            ?
         OR
             genre
         LIKE
-            "%${search}%"
+            ?
         OR
             abstract
         LIKE
-            "%${search}%"
+            ?
         `
+        preparedParams.push(`%${search}%`,`%${search}%`,`%${search}%`,`%${search}%`)
     }
     sql += `GROUP BY movies.id`
 
-    connection.query(sql, (err, results) => {
+    connection.query(sql, preparedParams, (err, results) => {
 
         if (err) {
             return res.status(500).json({
@@ -52,12 +54,15 @@ function index (req,res) {
 function show (req,res) {
 
     const {id} = req.params;
-    const sql = `SELECT 
-                   *
+    const sql = `
+                SELECT 
+                    movies.*, ROUND(AVG(reviews.vote), 2) AS reviews_vote
                 FROM
                     movies
+                LEFT JOIN
+                    reviews ON movies.id = reviews.movie_id
                 WHERE
-                    id = ?
+                    movie_id = ?
                 `
 
     connection.query(sql, [id], (err, results) => {
@@ -100,5 +105,11 @@ function show (req,res) {
         })
     })
 };
+//store review
+function storeReview (req, res) {
+    const {id} = req.params;
+    console.log(req.body);
+    res.send(`Nuova recensione aggiunta id: ${id}`)
+};
 
-module.exports = {index, show};
+module.exports = {index, show, storeReview};
