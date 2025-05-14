@@ -9,13 +9,14 @@
     npm i express  --> installa express
     npm i mysql2   --> si collega al db su mySql
     npm i cors     --> autorizza accesso a porte specifiche tramite browser
-
+    npm i multer   --> permette di aggiungere file al db
+    npm i slugify  --> gestione dinamica slug
 Per startare il server:
 
     npm run dev
 
 Se tutto funziona, dovrebbero apparire i seguenti messaggi nel terminale:
-- sono un server attivo sulla porta 3000
+- sono un server attivo sulla porta 3000 (o la vostra porta impostata)
 - MySQL server connected
 
 ---
@@ -39,5 +40,22 @@ Se tutto funziona, dovrebbero apparire i seguenti messaggi nel terminale:
 ---
 ### *Bonus Bonus*
 - Restituire nella rotta `index` anche la media delle recensioni dei vostri film
+
+---
+
+## Consegna Day 2-3 --> Setup Web App React 
+
+Vedi README di webapp-react
+
+---
+## Consegna Day 4
+
+## MILESTONE BACKEND
+Predisponiamo un’API per salvare nel database una nuova recensione legata ad un film
+Testiamola su postman e verifichiamo che nel DB venga effettivamente inserita una nuova recensione
+
+---
+### *Bonus*
+Provate a creare un nuovo film con upload immagine ``multer``
 
 ---
