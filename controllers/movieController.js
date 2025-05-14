@@ -1,5 +1,6 @@
 const connection = require('../data/db');
 const { url } = require('inspector');
+const slugify = require('slugify');
 //operazioni CRUD
 //index
 function index (req,res) {
@@ -54,6 +55,7 @@ function index (req,res) {
 function show (req,res) {
 
     const {id} = req.params;
+    //tiro fuori i dati del film
     const sql = `
                 SELECT 
                     movies.*, ROUND(AVG(reviews.vote), 2) AS reviews_vote
@@ -82,10 +84,11 @@ function show (req,res) {
 
         const currentMovie = results[0];
 
-        const movie = {...currentMovie,
+        const movie = {
+            ...currentMovie,
             imagePath: process.env.PUBLIC_PATH + '/images/movies_cover/' + currentMovie.image
             }
-
+        //trovato il film gli attacco le recensioni
         const sql = `SELECT 
                         *
                     FROM
@@ -100,7 +103,6 @@ function show (req,res) {
             }            
 
             movie.reviews = results; 
-
             res.json(movie);
         })
     })
@@ -108,8 +110,50 @@ function show (req,res) {
 //store review
 function storeReview (req, res) {
     const {id} = req.params;
-    console.log(req.body);
-    res.send(`Nuova recensione aggiunta id: ${id}`)
+    const {name, vote, text} = req.body;
+    const sql = `
+    INSERT INTO reviews (movie_id, name, vote, text) VALUES (?,?,?,?)
+    `
+    connection.query(sql, [id, name, vote, text], (err, result)=> {
+        if(err) {
+            return res.status(500).json({
+                errorMessage: err.sqlMessage
+            })
+        }
+        res.status(201);
+        res.json ({
+            id,
+            name,
+            vote,
+            text
+        })
+    })
+};
+//store
+function store (req,res) {
+
+    const {title, director, genre, release_year, abstract} = req.body;
+
+    const imageName = req.file.filename;
+
+    const sql = `
+    INSERT INTO movies (title, director, genre, release_year, abstract, image, slug) VALUES (?,?,?,?,?,?,?)
+    `
+
+    const slug = slugify(title, {
+        lower:true,
+        trim:true
+    })
+    
+    connection.query(sql, [title, director, genre, release_year, abstract, imageName, slug], (err, results)=> {
+            if(err) {
+            return res.status(500).json({
+                errorMessage: err.sqlMessage
+            })
+        }
+        res.status(201);
+        res.json ({ message: 'Movie added'})
+    })
 };
 
-module.exports = {index, show, storeReview};
+module.exports = {index, show, storeReview, store};
