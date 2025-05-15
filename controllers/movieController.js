@@ -1,5 +1,4 @@
 const connection = require('../data/db');
-const { url } = require('inspector');
 const slugify = require('slugify');
 //operazioni CRUD
 //index
@@ -54,7 +53,7 @@ function index (req,res) {
 //show
 function show (req,res) {
 
-    const {id} = req.params;
+    const {slug} = req.params;
     //tiro fuori i dati del film
     const sql = `
                 SELECT 
@@ -64,10 +63,10 @@ function show (req,res) {
                 LEFT JOIN
                     reviews ON movies.id = reviews.movie_id
                 WHERE
-                    movie_id = ?
+                    movies.slug = ?
                 `
 
-    connection.query(sql, [id], (err, results) => {
+    connection.query(sql, [slug], (err, results) => {
 
         if (err) {
             return res.status(500).json({
@@ -75,7 +74,7 @@ function show (req,res) {
             })
         }
 
-        if (results.length === 0) {
+        if (results.length === 0 || results[0]?.id === null) {
             return res.status(404).json({
                 errorMessage: 'No records found',
                 id
@@ -97,7 +96,7 @@ function show (req,res) {
                         movie_id = ?
                     `
 
-        connection.query(sql, [id], (err, results) => {
+        connection.query(sql, [currentMovie.id], (err, results) => {
             if (err) {
                 console.log(err);
             }            
@@ -129,11 +128,11 @@ function storeReview (req, res) {
         })
     })
 };
-//store
+//store --> aggiunta film
 function store (req,res) {
 
     const {title, director, genre, release_year, abstract} = req.body;
-
+    //request -> express-json() -> upload.single('image') -> req.file.filename
     const imageName = req.file.filename;
 
     const sql = `
